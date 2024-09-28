@@ -62,7 +62,7 @@ class mijiaAPI(object):
         data = {"home_id": home_id}
         return self._post_process(post_data(self.session, self.ssecurity, uri, data))
 
-    def run_scene(self, scene_id: str) -> bool:
+    def run_scene(self, scene_id: str,trigger_key = None) -> bool:
         """run scene
         mijiaAPI.run_scene(scene_id: str) -> bool
         -------
@@ -72,9 +72,14 @@ class mijiaAPI(object):
         @return
         dict, result
         """
+        if trigger_key is None:
+            trigger_key = "user.click"
+            print(f'run_scene:trigger_key is None, use default: {trigger_key}')
         uri = '/appgateway/miot/appsceneservice/AppSceneService/RunScene'
-        data = {"scene_id": scene_id, "trigger_key": "user.click"}
-        return self._post_process(post_data(self.session, self.ssecurity, uri, data))
+        data = {"scene_id": scene_id, "trigger_key": trigger_key}
+        run_scene_response = self._post_process(post_data(self.session, self.ssecurity, uri, data))
+        print(f'run_scene_response:{run_scene_response}')
+        return run_scene_response
 
     def get_consumable_items(self, home_id: str) -> list:
         """get consumable items
